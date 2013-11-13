@@ -12,3 +12,13 @@ fi
 
 # Customize to your needs...
 
+export LC_CTYPE=en_US.UTF-8
+export LC_ALL=en_US.UTF-8
+
+alias vim="mvim -v"
+alias v="vim"
+alias irc="mosh raine@vilja -- screen -rd irc"
+
+
+PATH=$PATH:$HOME/.rvm/bin # Add RVM to PATH for scripting
+[[ -s `brew --prefix`/etc/autojump.sh ]] && . `brew --prefix`/etc/autojump.sh

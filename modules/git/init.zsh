@@ -14,5 +14,6 @@ fi
 pmodload 'helper'
 
 # Source module files.
-source "${0:h}/alias.zsh"
+# source "${0:h}/alias.zsh"
+source "${0:h}/my_aliases.zsh"
 
