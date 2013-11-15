@@ -21,5 +21,9 @@ alias irc="mosh raine@vilja -- screen -rd irc"
 alias json="python -mjson.tool"
 alias jt="json"
 
+function curlj {
+  curl -s "$@" | jt
+}
+
 PATH=$PATH:$HOME/.rvm/bin # Add RVM to PATH for scripting
 [[ -s `brew --prefix`/etc/autojump.sh ]] && . `brew --prefix`/etc/autojump.sh
