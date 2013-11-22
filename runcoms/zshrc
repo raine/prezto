@@ -25,5 +25,18 @@ function curlj {
   curl -s "$@" | jt
 }
 
+# URL encode something and print it.
+function url-encode; {
+        setopt extendedglob
+        echo "${${(j: :)@}//(#b)(?)/%$[[##16]##${match[1]}]}"
+}
+
+# Search google for the given keywords.
+function google; {
+        open "http://www.google.com/search?q=`url-encode "${(j: :)@}"`"
+}
+
+alias goog="google"
+
 PATH=$PATH:$HOME/.rvm/bin # Add RVM to PATH for scripting
 [[ -s `brew --prefix`/etc/autojump.sh ]] && . `brew --prefix`/etc/autojump.sh
