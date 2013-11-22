@@ -21,6 +21,8 @@ alias irc="mosh raine@vilja -- screen -rd irc"
 alias json="python -mjson.tool"
 alias jt="json"
 
+eval  "$(gh alias -s)"
+
 function curlj {
   curl -s "$@" | jt
 }
