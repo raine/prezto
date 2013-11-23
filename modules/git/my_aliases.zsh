@@ -9,6 +9,7 @@ alias gp='git push'
 compdef _git gp=git-push
 alias gd='git diff'
 alias gc='git commit -v'
+alias gC='git commit -c HEAD'
 # alias gca='git commit -v -a'
 alias gca='git commit --amend'
 alias gb='git branch'
@@ -35,3 +36,9 @@ alias gra='git rebase --abort'
 alias gr='git rebase'
 alias gf='git fetch'
 compdef _git gf=git-fetch
+
+alias gclm='echo -n $(git log -1 --format="%B")'
+
+function get_commit_message; {
+  echo -n $(git show "$@" --format="%B" | head -1)
+}
