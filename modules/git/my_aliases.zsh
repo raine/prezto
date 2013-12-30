@@ -38,7 +38,18 @@ alias gf='git fetch'
 compdef _git gf=git-fetch
 
 alias gclm='echo -n $(git log -1 --format="%B")'
+alias gpsu='git push --set-upstream origin $(git rev-parse --abbrev-ref HEAD)'
+
+alias gpr='git pull-request'
 
 function get_commit_message; {
   echo -n $(git show "$@" --format="%B" | head -1)
 }
+
+alias gCl='git status | sed -n "s/^.*both [a-z]*ed: *//p"'
+alias gCa='git add $(gCl)'
+alias gCe='git mergetool $(gCl)'
+alias gCo='git checkout --ours --'
+alias gCO='gCo $(gCl)'
+alias gCt='git checkout --theirs --'
+alias gCT='gCt $(gCl)'
