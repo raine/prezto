@@ -53,3 +53,10 @@ alias gCo='git checkout --ours --'
 alias gCO='gCo $(gCl)'
 alias gCt='git checkout --theirs --'
 alias gCT='gCt $(gCl)'
+
+# Merge (m)
+alias gme='git merge'
+alias gmC='git merge --no-commit'
+alias gmF='git merge --no-ff'
+alias gma='git merge --abort'
+alias gmt='git mergetool'
