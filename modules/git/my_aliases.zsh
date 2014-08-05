@@ -57,6 +57,6 @@ alias gCT='gCt $(gCl)'
 # Merge (m)
 alias gme='git merge'
 alias gmC='git merge --no-commit'
-alias gmF='git merge --no-ff'
+alias gmF='git merge --no-ff --no-edit'
 alias gma='git merge --abort'
 alias gmt='git mergetool'
