@@ -74,14 +74,10 @@ cdf() {
 
 indir() { (cd "$1" && shift && eval "$@"); }
 
-
 PATH=$PATH:$HOME/.rvm/bin # Add RVM to PATH for scripting
 PATH=$PATH:$HOME/bin
-# export PATH="/usr/local/heroku/bin:$PATH"
 PATH=$PATH:"/usr/local/heroku/bin"
 PATH=$HOME/.cabal/bin:$PATH
-
-# [[ -s `brew --prefix`/etc/autojump.sh ]] && . `brew --prefix`/etc/autojump.sh
 
 source /Users/rainevi/.zsh/zaw/zaw.zsh
 bindkey '^R' zaw-history
@@ -99,7 +95,6 @@ zstyle ':filter-select' extended-search yes # see below
 export EDITOR="mvim -v"
 source /Users/rainevi/.rvm/scripts/rvm
 
-# export SBT_OPTS="-Xmx2G -XX:+UseConcMarkSweepGC -XX:+CMSClassUnloadingEnabled -XX:MaxPermSize=2G -Xss2M  -Duser.timezone=GMT"
 export SBT_OPTS="-Xss2M -Xmx1024M -XX:MaxPermSize=256M"
 
 export GOPATH=$HOME/go
