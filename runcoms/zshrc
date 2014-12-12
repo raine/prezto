@@ -7,6 +7,9 @@ source /Users/rainevi/.zshsecrets
 export LC_CTYPE=en_US.UTF-8
 export LC_ALL=en_US.UTF-8
 
+fpath=( ~/.zfunc "${fpath[@]}" )
+autoload -Uz `ls ~/.zfunc`
+
 alias vim="mvim -v"
 alias svim="sudo mvim -v"
 alias v="vim"
