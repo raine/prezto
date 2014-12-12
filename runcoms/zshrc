@@ -13,12 +13,14 @@ alias v="vim"
 alias irc="mosh raine@vilja -- screen -rd irc"
 alias json="python -mjson.tool"
 alias jt="json"
-alias ack="ag"
+# alias ack="ag"
 alias lcc='fc -ln -1 | awk "{\$1=\$1}1" ORS="" | pbcopy'
 alias goog="google"
 
 alias nid="npm install --save-dev"
 alias nis="npm install --save"
+
+alias noderepl="node ~/noderepl/myrepl.js"
 
 # eval "$(gh alias -s)"
 
@@ -53,6 +55,11 @@ function trim-empty; {
   convert "$1" -fuzz "1%" -trim +repage "$1"
 }
 
+# alias buh="cut -d\  -f3- | bunyan"
+# alias buh='awk '\''{$1=$2=""; gsub(/^[ ]+/,"", $0); print $0; system("") }'\'' | bunyan'
+# alias buh="sed -l 's/.*app\[web\..*\]\: //' | bunyan"
+alias buh="grep --line-buffered --color=none 'app\[web.\d\+\]' | sed -l 's/.*app\[web\..*\]\: //' | bunyan"
+
 # Change directory to the current Finder directory
 cdf() {
   target=`osascript -e 'tell application "Finder" to if (count of Finder windows) > 0 then get POSIX path of (target of front Finder window as text)'`
@@ -63,11 +70,14 @@ cdf() {
   fi
 }
 
+indir() { (cd "$1" && shift && eval "$@"); }
+
 
 PATH=$PATH:$HOME/.rvm/bin # Add RVM to PATH for scripting
 PATH=$PATH:$HOME/bin
 # export PATH="/usr/local/heroku/bin:$PATH"
 PATH=$PATH:"/usr/local/heroku/bin"
+PATH=$HOME/.cabal/bin:$PATH
 
 # [[ -s `brew --prefix`/etc/autojump.sh ]] && . `brew --prefix`/etc/autojump.sh
 
@@ -94,3 +104,5 @@ export SBT_OPTS="-Xss2M -Xmx1024M -XX:MaxPermSize=256M"
 
 export GOPATH=$HOME/go
 export PATH=$PATH:$GOPATH/bin
+eval "`npm completion`"
+eval "$(gulp --completion=zsh)"
