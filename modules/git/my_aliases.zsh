@@ -33,16 +33,19 @@ compdef _git ga=git-add
 alias gai='git add -i'
 compdef _git gai=git-add
 alias gspp='git stash && git pull --rebase && git push && git stash apply'
+
+alias gr='git rebase'
 alias grc='git rebase --continue'
 alias gra='git rebase --abort'
-alias gr='git rebase'
+alias gri='git rebase --interactive'
+
 alias gf='git fetch'
 compdef _git gf=git-fetch
 
 alias gclm='echo -n $(git log -1 --format="%B")'
 alias gpsu='git push --set-upstream origin $(git rev-parse --abbrev-ref HEAD)'
 
-alias gpr='git pull-request'
+alias gPr='git pull-request'
 
 function get_commit_message; {
   echo -n $(git show "$@" --format="%B" | head -1)
@@ -63,4 +66,5 @@ alias gmF='git merge --no-ff --no-edit'
 alias gma='git merge --abort'
 alias gmt='git mergetool'
 
-alias grH='git reset --hard'
+alias greh='git reset --hard'
+alias gre='git reset'
