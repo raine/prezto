@@ -57,9 +57,6 @@ function trim-empty; {
   convert "$1" -fuzz "1%" -trim +repage "$1"
 }
 
-# alias buh="cut -d\  -f3- | bunyan"
-# alias buh='awk '\''{$1=$2=""; gsub(/^[ ]+/,"", $0); print $0; system("") }'\'' | bunyan'
-# alias buh="sed -l 's/.*app\[web\..*\]\: //' | bunyan"
 alias buh="grep --line-buffered --color=none 'app\[web.\d\+\]' | sed -l 's/.*app\[web\..*\]\: //' | bunyan"
 
 # Change directory to the current Finder directory
