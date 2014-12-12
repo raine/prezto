@@ -12,11 +12,13 @@ alias gc='git commit -v'
 alias gC='git commit -c HEAD -v'
 # alias gca='git commit -v -a'
 alias gca='git commit --amend'
+alias gcal='git commit -a --amend --no-edit'
 alias gb='git branch'
 compdef _git gb=git-branch
 alias gba='git branch -a'
 compdef _git gba=git-branch
 alias gap='git add --patch'
+alias gapc='git add --patch && git commit'
 alias glg="git log --pretty=format:'%Cred%h%Creset%C(yellow)%d%Creset %s %Cgreen(%cr)%Creset' --abbrev-commit --date=relative"
 compdef _git glg=git-log
 alias gsa='git stash apply'
@@ -60,3 +62,5 @@ alias gmC='git merge --no-commit'
 alias gmF='git merge --no-ff --no-edit'
 alias gma='git merge --abort'
 alias gmt='git mergetool'
+
+alias grH='git reset --hard'
