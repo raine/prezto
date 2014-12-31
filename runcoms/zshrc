@@ -29,7 +29,8 @@ alias jt="json"
 alias lcc='fc -ln -1 | awk "{\$1=\$1}1" ORS="" | pbcopy' # copy last command
 alias goog="google"
 # alias ack="ag"
-#
+alias t="teamocil"
+alias th="teamocil --here"
 
 alias nisd="npm install --save-dev"
 alias nis="npm install --save"
@@ -38,10 +39,15 @@ alias noderepl="node ~/noderepl/myrepl.js"
 
 mcd() { mkdir $1 && cd $1; }
 
+git-ignore() {
+  echo $1 >> .gitignore
+}
+
 eval "$(gh alias -s)"
 eval "$(fasd --init auto)"
 eval "`npm completion`"
 eval "$(gulp --completion=zsh)"
+compctl -g '~/.teamocil/*(:t:r)' teamocil
 
 alias j='fasd_cd -d'     # cd, same functionality as j in autojump
 alias jj='fasd_cd -d -i' # cd with interactive selection
