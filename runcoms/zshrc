@@ -151,6 +151,7 @@ botch() {
   done
 }
 
+# run something in a directory and go back
 indir() { (cd "$1" && shift && eval "$@"); }
 
 PATH=$PATH:$HOME/.rvm/bin # Add RVM to PATH for scripting
