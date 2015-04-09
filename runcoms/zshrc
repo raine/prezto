@@ -29,7 +29,6 @@ alias json="python -mjson.tool"
 alias jt="json"
 alias lcc='fc -ln -1 | awk "{\$1=\$1}1" ORS="" | pbcopy' # copy last command
 alias goog="google"
-# alias ack="ag"
 alias t="teamocil"
 alias th="teamocil --here"
 
