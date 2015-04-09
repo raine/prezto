@@ -1,3 +1,12 @@
+# enable single alias for both git add -p and grep + git add -p
+function git-add-patch; {
+  if (( $# == 0 )); then
+    git add -p
+  else
+    git grep-add-patch $1
+  fi;
+}
+
 alias gdc='git diff --cached'
 alias gst='git status -s' # git >1.7.0
 alias glr='git pull --rebase'
@@ -6,13 +15,16 @@ alias gp='git push'
 alias gd='git diff'
 alias gc='git commit -v'
 alias gC='git commit -c HEAD -v'
-# alias gca='git commit -v -a'
 alias gca='git commit --amend'
 alias gcal='git commit -a --amend --no-edit'
+alias gcur='git add README.md && git commit -m "update README"'
 alias gb='git branch'
 alias gba='git branch -a'
-alias gap='git add --patch'
-alias gapc='git add --patch && git commit'
+alias gap='git-add-patch'
+alias gapc='git-add-patch && git commit -v'
+alias gapca='git-add-patch && git commit -v --amend --no-edit'
+alias gga='git grep-add'
+# alias ggap='git grep-add-patch'
 alias glg="git log --pretty=format:'%Cred%h%Creset%C(yellow)%d%Creset %s %Cgreen(%cr)%Creset' --abbrev-commit --date=relative"
 alias gsa='git stash apply'
 alias gs='git stash'
@@ -25,14 +37,17 @@ alias gspp='git stash && git pull --rebase && git push && git stash apply'
 alias gr='git rebase'
 alias grc='git rebase --continue'
 alias gra='git rebase --abort'
-alias gri='git rebase --interactive'
+alias gri='git rebase --interactive --autosquash'
+alias garc='git add . && git rebase --continue'
 
 alias gf='git fetch'
 
 alias gclm='echo -n $(git log -1 --format="%B")'
-alias gpsu='git push --set-upstream origin $(git rev-parse --abbrev-ref HEAD)'
+alias gpuo='git push -u origin $(git rev-parse --abbrev-ref HEAD)'
+alias gpur='git push -u raine $(git rev-parse --abbrev-ref HEAD)'
 
-alias gPr='git pull-request'
+alias gpd='git push --delete --no-verify'
+alias gpr='git pull-request'
 
 function get_commit_message; {
   echo -n $(git show "$@" --format="%B" | head -1)
@@ -50,6 +65,9 @@ alias gCT='gCt $(gCl)'
 alias gme='git merge'
 alias gmC='git merge --no-commit'
 alias gmF='git merge --no-ff --no-edit'
+# Previous branch
+alias gmFF='git merge --no-ff --no-edit "@{-1}"'
+alias gmFFF='git checkout develop && git pull --rebase && git merge --no-ff --no-edit "@{-1}" && git push'
 alias gma='git merge --abort'
 alias gmt='git mergetool'
 
