@@ -20,6 +20,7 @@ alias -g L="| less"
 alias -g G="| ag"
 alias -g S="| sed -e"
 alias -g A="| awk"
+alias -g J="| jq ."
 alias vim="mvim -v"
 alias svim="sudo mvim -v"
 alias v="vim"
@@ -34,8 +35,26 @@ alias th="teamocil --here"
 
 alias nisd="npm install --save-dev"
 alias nis="npm install --save"
+alias nig="npm install -g"
 
 alias noderepl="node ~/noderepl/myrepl.js"
+alias now='date -u +"%Y-%m-%dT%H:%M:%SZ"'
+
+
+npm-bin-path() {
+  echo "adding `npm bin` to path"
+  export PATH=$(npm bin):$PATH
+  echo $PATH
+}
+
+# align graphite raw output
+alias align="tr '|' , | cut -d',' -f1,5- | sed 's/\\.0//g' | column -t -s,"
+
+debug() {
+  export DEBUG=*
+}
+
+alias nodebug="unset DEBUG"
 
 mcd() { mkdir $1 && cd $1; }
 
@@ -43,11 +62,36 @@ git-ignore() {
   echo $1 >> .gitignore
 }
 
-eval "$(gh alias -s)"
-eval "$(fasd --init auto)"
-eval "`npm completion`"
-eval "$(gulp --completion=zsh)"
+eval "$(hub alias -s)"
+# eval "`npm completion`"
+# eval "$(gulp --completion=zsh)"
 compctl -g '~/.teamocil/*(:t:r)' teamocil
+
+# eval "$(fasd --init auto)"
+fasd_cache="$HOME/.fasd-init-bash"
+if [ "$(command -v fasd)" -nt "$fasd_cache" -o ! -s "$fasd_cache" ]; then
+  fasd --init auto >| "$fasd_cache"
+fi
+source "$fasd_cache"
+unset fasd_cache
+
+# cache_file="${0:h}/cache.zsh"
+# if [[ "${commands[fasd]}" -nt "$cache_file" || ! -s "$cache_file"  ]]; then
+#   # Set the base init arguments.
+#   init_args=(zsh-hook)
+#
+#   # Set fasd completion init arguments, if applicable.
+#   if zstyle -t ':omz:module:completion' loaded; then
+#     init_args+=(zsh-ccomp zsh-wcomp)
+#   fi
+#
+#   # Cache init code.
+#   fasd --init "$init_args[@]" >! "$cache_file" 2> /dev/null
+# fi
+#
+# source "$cache_file"
+#
+# unset cache_file init_args
 
 alias j='fasd_cd -d'     # cd, same functionality as j in autojump
 alias jj='fasd_cd -d -i' # cd with interactive selection
@@ -93,6 +137,20 @@ cdf() {
   fi
 }
 
+botch() {
+  printf '\e[?25l'
+  while true; do
+    (echo -en '\033[H'
+      CMD="$@"
+      bash -c "$CMD" | while read LINE; do
+        echo -n "$LINE"
+        echo -e '\033[0K'
+      done
+      echo -en '\033[J') | tac | tac
+    sleep 2
+  done
+}
+
 indir() { (cd "$1" && shift && eval "$@"); }
 
 PATH=$PATH:$HOME/.rvm/bin # Add RVM to PATH for scripting
@@ -103,20 +161,24 @@ PATH=$HOME/.cabal/bin:$PATH
 source /Users/rainevi/.zsh/zaw/zaw.zsh
 bindkey '^R' zaw-history
 bindkey '^L' zaw-ack
-# bindkey '^' zaw-recent-branches
-bindkey -M filterselect '^R' down-line-or-history
-bindkey -M filterselect '^S' up-line-or-history
 bindkey -M filterselect '^E' accept-search
 
 zstyle ':filter-select:highlight' matched fg=green
-# zstyle ':filter-select' max-lines 10
 zstyle ':filter-select' case-insensitive yes # enable case-insensitive
 zstyle ':filter-select' extended-search yes # see below
 
+# export MAKEFLAGS="-j 8"
 export EDITOR="mvim -v"
-source /Users/rainevi/.rvm/scripts/rvm
-
-export SBT_OPTS="-Xss2M -Xmx1024M -XX:MaxPermSize=256M"
-
+# source /Users/rainevi/.rvm/scripts/rvm
+# export SBT_OPTS="-Xss2M -Xmx1024M -XX:MaxPermSize=256M"
 export GOPATH=$HOME/go
 export PATH=$PATH:$GOPATH/bin
+export NVM_DIR="/Users/rainevi/.nvm"
+[ -s "$NVM_DIR/nvm.sh" ] && . "$NVM_DIR/nvm.sh"  # This loads nvm
+
+bindkey '^P' up-history
+bindkey '^N' down-history
+bindkey '^?' backward-delete-char
+bindkey '^h' backward-delete-char
+bindkey '^w' backward-kill-word
+export KEYTIMEOUT=1 # vi mode esc timeout
