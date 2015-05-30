@@ -47,6 +47,9 @@ alias nig="npm install -g"
 alias noderepl="node ~/noderepl/myrepl.js"
 alias now='date -u +"%Y-%m-%dT%H:%M:%SZ"'
 
+c() {
+  git commit -m "$*"
+}
 
 npm-bin-path() {
   echo "adding `npm bin` to path"
