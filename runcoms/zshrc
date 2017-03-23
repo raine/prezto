@@ -2,7 +2,7 @@ if [[ -s "${ZDOTDIR:-$HOME}/.zprezto/init.zsh" ]]; then
   source "${ZDOTDIR:-$HOME}/.zprezto/init.zsh"
 fi
 
-source /Users/rainevi/.zshsecrets
+# source /Users/raine/.zshsecrets
 
 export LC_CTYPE=en_US.UTF-8
 export LC_ALL=en_US.UTF-8
@@ -19,18 +19,21 @@ alias -g H="| head"
 alias -g T="| tail"
 alias -g C="| wc -l"
 alias -g L="| less -F"
+alias -g LC="--color | less -F"
 alias -g G="| ag"
 alias -g S="| sed -e"
 alias -g A="| awk"
 alias -g J="| jq ."
-alias -g P="| pygmentize -g | less -F"
+alias -g PP="| pygmentize -g | less -F"
 alias -g Y="| pbcopy"
 alias -g F="| fzf"
+alias -g P="| peco"
 alias -g B="| bunyan"
+alias -g BL="| bunyan --color | less -F"
 alias vim="mvim -v"
 alias svim="sudo mvim -v"
 alias v="vim"
-alias irc="mosh raine@vilja -- screen -rd irc"
+alias irc="mosh -p 9601:9620 atomi -- screen -rd irc"
 alias json="python -mjson.tool"
 alias jt="json"
 alias lcc='fc -ln -1 | awk "{\$1=\$1}1" ORS="" | pbcopy' # copy last command
@@ -38,8 +41,10 @@ alias goog="google"
 alias t="teamocil"
 alias th="teamocil --here"
 alias ccat="pygmentize -g"
-alias cless="pygmentize -g | less -F"
+cless() { pygmentize -g $1 | less -F }
+alias pbedit="pbpaste | vipe | pbcopy"
 
+alias ni="npm install"
 alias nisd="npm install --save-dev"
 alias nis="npm install --save"
 alias nig="npm install -g"
@@ -47,8 +52,34 @@ alias nig="npm install -g"
 alias noderepl="node ~/noderepl/myrepl.js"
 alias now='date -u +"%Y-%m-%dT%H:%M:%SZ"'
 
+alias buh="grep --line-buffered --color=none 'app\[web.\d\+\]' | sed -l 's/.*app\[web\..*\]\: //' | bunyan"
+alias bunyan-ls='jq -r -c '\''del(.tags,.path,.logstash_origin,."@timestamp",."@version")'\'' | bunyan'
+alias bun="R -c 'omit <[ tags path logstash_origin @version ]>' | bunyan -o short"
+
+alias jks="jenkins"
+
+alias dm="docker-machine"
+alias dli="docker images -q | head -n1"
+alias dlc="docker ps -q | head -n1"
+alias dri="docker run -it --rm"
+
+alias R='ramda id'
+alias ram='replem ramda:R!'
+
+alias shiba=/Applications/Shiba.app/Contents/MacOS/Shiba
+
+json-flat-table() { R identity -o table "$@" | less }
+
+# align graphite raw output
+alias align="tr '|' , | cut -d',' -f1,5- | sed 's/\\.0//g' | column -t -s,"
+
 c() {
   git commit -m "$*"
+}
+
+gist-clone() {
+  gist_id=`echo "$1" | sed -e 's/.*\///g'`
+  git clone git@gist.github.com:/$gist_id.git $2
 }
 
 npm-bin-path() {
@@ -56,9 +87,6 @@ npm-bin-path() {
   export PATH=$(npm bin):$PATH
   echo $PATH
 }
-
-# align graphite raw output
-alias align="tr '|' , | cut -d',' -f1,5- | sed 's/\\.0//g' | column -t -s,"
 
 debug() {
   export DEBUG=*
@@ -69,13 +97,13 @@ alias nodebug="unset DEBUG"
 mcd() { mkdir $1 && cd $1; }
 
 git-ignore() {
-  echo $1 >> .gitignore
+  echo $1 >>! .gitignore
 }
 
 eval "$(hub alias -s)"
 # eval "`npm completion`"
 # eval "$(gulp --completion=zsh)"
-compctl -g '~/.teamocil/*(:t:r)' teamocil
+# compctl -g '~/.teamocil/*(:t:r)' teamocil
 
 fasd_cache="$HOME/.fasd-init-bash"
 if [ "$(command -v fasd)" -nt "$fasd_cache" -o ! -s "$fasd_cache" ]; then
@@ -108,19 +136,23 @@ function google; {
   open "http://www.google.com/search?q=`url-encode "${(j: :)@}"`"
 }
 
-function beautify; {
-  uglifyjs "$@" -b -o "$@"
+jscat() {
+  < $1 | js-beautify -s 2 -f - | pygmentize -g | less -F
 }
 
 function trim-empty; {
   convert "$1" -fuzz "1%" -trim +repage "$1"
 }
 
-function parsedate; {
+function parse-date; {
   node -e "console.log(new Date($1))"
 }
 
-alias buh="grep --line-buffered --color=none 'app\[web.\d\+\]' | sed -l 's/.*app\[web\..*\]\: //' | bunyan"
+function parse-unixtime; {
+  node -e "console.log(require('moment').unix($1).toString())"
+}
+
+alias unixtime='date "+%s"'
 
 # Change directory to the current Finder directory
 cdf() {
@@ -149,16 +181,14 @@ botch() {
 # run something in a directory and go back
 indir() { (cd "$1" && shift && eval "$@"); }
 
-alias bunyan-ls='jq -r -c '\''del(.tags,.path,.logstash_origin,."@timestamp",."@version")'\'' | bunyan'
-
 PATH=$PATH:$HOME/.rvm/bin # Add RVM to PATH for scripting
 PATH=$PATH:$HOME/bin
 PATH=$PATH:"/usr/local/heroku/bin"
 PATH=$HOME/.cabal/bin:$PATH
 
-source /Users/rainevi/.zsh/zaw/zaw.zsh
+source /Users/raine/.zsh/zaw/zaw.zsh
+bindkey '^X' zaw
 bindkey '^R' zaw-history
-bindkey '^L' zaw-ack
 bindkey -M filterselect '^E' accept-search
 
 zstyle ':filter-select:highlight' matched fg=green
@@ -170,11 +200,14 @@ export EDITOR="mvim -v"
 export VISUAL="mvim -v"
 
 # source /Users/rainevi/.rvm/scripts/rvm
-# export SBT_OPTS="-Xss2M -Xmx1024M -XX:MaxPermSize=256M"
 export GOPATH=$HOME/go
 export PATH=$PATH:$GOPATH/bin
-export NVM_DIR="/Users/rainevi/.nvm"
-[ -s "$NVM_DIR/nvm.sh" ] && . "$NVM_DIR/nvm.sh"  # This loads nvm
+export NVM_DIR="/Users/raine/.nvm"
+PATH=~/.nvm/versions/node/v7.7.0/bin:$PATH
+# [ -s "$NVM_DIR/nvm.sh" ] && . "$NVM_DIR/nvm.sh"
+
+alias nvm-use=". ~/.nvm/nvm.sh && nvm use"
+alias nvm-load=". ~/.nvm/nvm.sh"
 
 bindkey '^P' up-history
 bindkey '^N' down-history
@@ -184,4 +217,14 @@ bindkey '^w' backward-kill-word
 export KEYTIMEOUT=1 # vi mode esc timeout
 
 export FZF_DEFAULT_OPTS='-x -m'
+export FZF_DEFAULT_COMMAND='ag -l -g ""'
 [ -f ~/.fzf.zsh ] && source ~/.fzf.zsh
+
+export ELM_HOME="/usr/local/lib/node_modules/elm/share"
+alias d="docker"
+
+PATH="/Users/raine/perl5/bin${PATH+:}${PATH}"; export PATH;
+PERL5LIB="/Users/raine/perl5/lib/perl5${PERL5LIB+:}${PERL5LIB}"; export PERL5LIB;
+PERL_LOCAL_LIB_ROOT="/Users/raine/perl5${PERL_LOCAL_LIB_ROOT+:}${PERL_LOCAL_LIB_ROOT}"; export PERL_LOCAL_LIB_ROOT;
+PERL_MB_OPT="--install_base \"/Users/raine/perl5\""; export PERL_MB_OPT;
+PERL_MM_OPT="INSTALL_BASE=/Users/raine/perl5"; export PERL_MM_OPT;
